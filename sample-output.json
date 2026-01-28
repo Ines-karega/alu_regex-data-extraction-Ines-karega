@@ -1,0 +1,22 @@
+{
+  "emails": [
+    "[REDACTED]",
+    "[REDACTED]"
+  ],
+  "urls": [
+    "https://www.techafrica.com",
+    "https://docs.techafrica.com/help."
+  ],
+  "phone numbers": [
+    "+(250)788123456",
+    "0798-123-456"
+  ],
+  "currency amounts": [
+    "$1,250.50",
+    "$19.99",
+    "$12"
+  ],
+  "credit_cards": [
+    "**** **** **** 3456"
+  ]
+}
