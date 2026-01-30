@@ -1,37 +1,81 @@
-// Step 1: Import the 'fs' module to work with the file system // This allows us to read and write files
+// Import the 'fs' module inorder to be able to read and write in files 
 const fs = require("fs");
 
-// Step 2: Read the content of 'sample-input.txt' file // We are reading the text from this file into a variable
+// Read the content of 'sample-input.txt' file in the text variable 
 const text = fs.readFileSync("sample-input.txt", "utf-8");
 
-// Step 3: Define regular expressions (regex) for different patterns // Regex helps us find specific formats in the text
+// Regex patterns with short explanations:
+// - emailRegex: matches common email formats (user@domain.tld, supports dots and hyphens)
+const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
+// - urlRegex: matches http/https URLs (stops at whitespace)
+const urlRegex = /https?:\/\/[^\s)]+/g;
+// - phoneRegex: matches common phone formats with optional country code
+const phoneRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
+// - currencyRegex: matches dollar amounts like $1,234.56 or $19.99
+const currencyRegex = /\$\d{1,3}(,\d{3})*(\.\d{2})?/g;
+// - cardRegex: matches 16-digit cards in groups separated by space or dash
+const cardRegex = /\b(?:\d{4}[- ]?){3}\d{4}\b/g;
 
-const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g; // This pattern matches email addresses
-const urlRegex = /https?:\/\/[^\s]+/g; // This pattern matches web URLs
-const phoneRegex = /(\+\(250\)\d{9}|07\d{2}-?\d{3}-?\d{3})/g; // This pattern matches phone numbers
-const currencyRegex = /\$\d{1,3}(,\d{3})*(\.\d{2})?/g; // This pattern matches currency amounts
-const cardRegex = /\b\d{4} \d{4} \d{4} \d{4}\b/g; // This pattern matches credit card numbers
+// Helper: remove trailing punctuation that often gets picked up in text (.,;:)
+function clean(s) {
+  return String(s).replace(/[.,;:!?]+$/g, "").trim();
+}
 
-// Step 4: Extract matches from the text // We will find all occurrences of each pattern in the text
-const emails = text.match(emailRegex) || []; // This finds all email addresses in the text
-const urls = text.match(urlRegex) || []; // This finds all URLs in the text
-const phones = text.match(phoneRegex) || []; // This finds all phone numbers in the text
-const currencies = text.match(currencyRegex) || []; // This finds all currency amounts in the text
-const cards = text.match(cardRegex) || []; // This finds all credit card numbers in the text
+// Simple safety check: reject obvious script-like or data URIs and inline event handlers
+function isSafe(s) {
+  const str = String(s);
+  return !(/<\s*script\b|javascript:|data:text\/html|on\w+\s*=|<\s*iframe\b/i.test(str));
+}
 
-// Step 5: Mask credit cards for security // We replace the first 12 digits with asterisks to protect sensitive information
-const maskedCards = cards.map(card => "**** **** **** " + card.slice(-4));
+// Extract and clean matches for a given regex (keeps only safe results)
+function extractAndClean(regex) {
+  const found = text.match(regex) || [];
+  const out = [];
+  for (let i = 0; i < found.length; i++) {
+    const c = clean(found[i]);
+    if (c && isSafe(c)) out.push(c);
+  }
+  return out;
+}
 
-// Step 6: Prepare JSON output // We create an object to hold all the extracted data in a structured format
+let emails = extractAndClean(emailRegex);
+let urls = extractAndClean(urlRegex);
+let phones = extractAndClean(phoneRegex);
+let currencies = extractAndClean(currencyRegex);
+let cards = extractAndClean(cardRegex);
+
+// Masking functions (simple and safe):
+function maskEmail(email) {
+  // hide the local-part entirely and keep the domain
+  return "***@" + String(email).split("@").slice(1).join("@");
+}
+
+function maskCard(cardNumber) {
+  return "**** **** **** " + String(cardNumber).slice(-4);
+}
+
+// Mask all found sensitive items using clear loops (easy to follow)
+const maskedEmails = [];
+for (let i = 0; i < emails.length; i++) {
+  maskedEmails.push(maskEmail(emails[i]));
+}
+
+const maskedCards = [];
+for (let i = 0; i < cards.length; i++) {
+  maskedCards.push(maskCard(cards[i]));
+}
+
+// creating an object called output that groups all the results (emails, URLs, phone numbers, currency amounts, and credit cards) into one place
 const output = {
-  emails, // List of extracted email addresses
-  urls, // List of extracted URLs
-  "phone numbers": phones, // List of extracted phone numbers
-  "currency amounts": currencies, // List of extracted currency amounts
-  credit_cards: maskedCards // List of masked credit card numbers
+  emails: maskedEmails,
+  urls: urls,
+  "phone numbers": phones,
+  "currency amounts": currencies,
+  "credit_cards": maskedCards
 };
 
-// Step 7: Write results to sample-output.json // We save the output object as a JSON file for easy access
+// Write results to sample-output.json file (masked and filtered)
 fs.writeFileSync("sample-output.json", JSON.stringify(output, null, 2));
-
-console.log("Data extracted successfully! Check sample-output.json"); // This message confirms that the data extraction is complete
+console.log("-----Extracted Results (masked/filtered)------");
+console.log(JSON.stringify(output, null, 2));
+console.log("Results saved to sample-output.json");

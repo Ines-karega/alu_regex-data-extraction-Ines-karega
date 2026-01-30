@@ -1,49 +1,43 @@
 # alu_regex-data-extraction-Ines-karega
-A program that finds and organizes specific information from messy text.
+A short project that extracts useful data from messy text and protects sensitive pieces.
+
+## Project overview
+This program reads a text file, finds common data (emails, links, phone numbers, money, credit-card-like numbers), performs simple validation, masks sensitive values, and saves the results as JSON.
+
+## What I implemented
+- Extraction of the following data types: **Emails, URLs, Phone numbers, Currency amounts, Credit card numbers**.
+- Simple validation and filtering to ignore likely unsafe or malformed matches (e.g., script tags, data URIs, obvious broken formats).
+- Masking of sensitive fields so outputs do not reveal full personal data (emails : `(first letter)***(@domain)`, cards:`**** **** **** (last four digits)`).
+
+## Input design
+- `sample-input.txt` contains realistic, messy examples: variations in spacing, punctuation, separators (spaces, dashes, dots), and some malformed/malicious inputs to test filtering.It is the file the program reads as input — replace it with your own raw text when you want to test or use the script.
+
+## Output design
+- `sample-output.json` contains the extracted structured data (emails, URLs, phone numbers, currency amounts, credit cards) taken from `sample-input.txt`. Sensitive values are masked to protect privacy.
 
 
-## What Does It Do?
+## Implementation (simple explanations)
+- Language: JavaScript (Node.js). Main file: `regex.js`.
 
-Imagine you have a document with emails, phone numbers, websites, money amounts, and credit card numbers all mixed together. This program finds each type of information and puts them in a neat organized list.
+- Important regex ideas:
+  - Email: a common local@domain.tld pattern that allows dots, hyphens, plus signs.
+  - URL: simple http/https pattern that stops at whitespace or a closing parenthesis.
+  - Phone: accepts common formats with spaces, dots, dashes, optional country code and parentheses.
+  - Currency: matches dollar amounts with optional thousands separators and two decimals.
+  - Card: accepts 16-digit numbers grouped by spaces or dashes.
+(See inline comments in `regex.js` for easy explanations on each code.)
 
+## Security & robustness notes
+- Privacy: outputs are masked to avoid leaking full emails or card numbers.
+- Filtering: Malicious or malformed inputs are also ignored when they do not match the regex patterns defined for valid inputs of the data types used.
 
-## The Three Files
-
-### **regex.js** - The Main Program
-This is the "worker" that:
-1. Reads messy text from `sample-input.txt`
-2. Searches for specific patterns (emails, URLs, phone numbers, money, credit cards) using regex (special search patterns)
-3. Hides credit card numbers for security (shows only last 4 digits)
-4. Saves all found information to `sample-output.json` in organized format
-
-### **sample-input.txt** - The Messy Text
-Contains example data with:
-- Emails: `ines.karega@gmail.com`, `support@tech-africa.co.rw`
-- Websites: `https://www.techafrica.com`
-- Phone numbers: `+(250)788123456`, `0798-123-456`
-- Money: `$1,250.50`, `$19.99`
-- Credit card: `1234 5678 9012 3456`
-
-### **sample-output.json** - The Results
-Shows what the program found, organized neatly:
-- Emails → hidden (`[REDACTED]`)
-- Websites → shown
-- Phone numbers → shown
-- Money amounts → shown
-- Credit cards → masked (`**** **** **** 3456`)
-
----
-
-## How to Use
+## How to run
+1. Make sure you installed Node.js .
+2. Open a terminal in the project folder.
+3. Run:
 
 ```bash
 node regex.js
 ```
-This runs the program. It automatically creates/updates `sample-output.json` with the extracted data.
 
----
-
-## Security Features
-Credit cards are masked (only last 4 digits visible)
-Emails are hidden for privacy
-Phone numbers and websites are safe to show
+4. Open `sample-output.json` to see the results that were also displayed in the terminal after running the program since they are being saved in this `sample-output.json` file.
