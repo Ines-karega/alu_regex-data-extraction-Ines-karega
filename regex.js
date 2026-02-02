@@ -1,7 +1,7 @@
 // Import fs module to read and write files
 const fs = require("fs");
 
-// Read the text inside sample-input.txt and store it in a variable named text
+// Opens the file "sample-input.txt", reads all the texts inside it as proper letters and symbols using UTF-8, and stores those texts in the variable named text
 const text = fs.readFileSync("sample-input.txt", "utf-8");
 
 // Regex patterns to find different data types in the input text:
