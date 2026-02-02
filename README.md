@@ -13,7 +13,7 @@ This program reads a text file, finds common data (emails, links, phone numbers,
 - `sample-input.txt` contains realistic, messy examples: variations in spacing, punctuation, separators (spaces, dashes, dots), and some malformed/malicious inputs to test filtering.It is the file the program reads as input — replace it with your own raw text when you want to test or use the script.
 
 ## Output design
-- `sample-output.json` contains the extracted structured data (emails, URLs, phone numbers, currency amounts, credit cards) taken from `sample-input.txt`. Sensitive values are masked to protect privacy.
+- `sample-output.txt` contains the extracted structured data (emails, URLs, phone numbers, currency amounts, credit cards) taken from `sample-input.txt`. Sensitive values are masked to protect privacy.
 
 
 ## Implementation (simple explanations)
@@ -41,4 +41,4 @@ See inline comments in `regex.js` for easy explanations on each code.
 node regex.js
 ```
 
-4. Open `sample-output.json` to see the results that were also displayed in the terminal after running the program since they are being saved in this `sample-output.json` file.
+4. Open `sample-output.txt` to see the results that were also displayed in the terminal after running the program since they are being saved in this `sample-output.txt` file.
