@@ -60,4 +60,4 @@ fs.writeFileSync("sample-output.json", JSON.stringify(outputs, null, 2));
 // displays results in the console while maintaining the json format 
 console.log("-----Extracted Results------");
 console.log(JSON.stringify(outputs, null, 2));
-console.log("Results saved to sample-output.json");
+console.log("The above results are saved to sample-output.json file");
