@@ -1,4 +1,4 @@
-# alu_regex-data-extraction- 
+# alu_regex-data-extraction
 A short project that extracts useful data from messy text and protects sensitive pieces.
 
 ## Project overview
