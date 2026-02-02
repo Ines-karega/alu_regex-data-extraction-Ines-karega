@@ -12,8 +12,8 @@ const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
 const urlRegex = /https?:\/\/[^\s)]+/g;
 // This regex matches the shape of a phone number by looking for an optional country code, then an area code, then groups of digits separated by spaces, dashes, or dots
 const phoneRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
-// This regex matches the shape of a currency amount by looking for a $ sign, then digits, optional commas for thousands, and optional cents after a dot
-const currencyRegex = /\$\d{1,3}(,\d{3})*(\.\d{2})?/g;
+// This regex matches the shape of a currency amount by looking for a $ sign, then digits, optional commas for thousands, and it requires exactly two digits after a decimal point (cents)
+const currencyRegex = /\$\d{1,3}(,\d{3})*(\.\d{2})\b/g;
 // This regex matches the shape of a creditcard number by looking for 16 digits grouped into 4s, with optional spaces or dashes between groups
 const cardRegex = /\b(?:\d{4}[- ]?){3}\d{4}\b/g;
 
