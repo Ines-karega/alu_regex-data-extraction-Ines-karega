@@ -6,7 +6,7 @@ This program reads a text file, finds common data (emails, links, phone numbers,
 
 ## What I implemented
 - Extraction of the following data types: **Emails, URLs, Phone numbers, Currency amounts, Credit card numbers**.
-- Simple validation and filtering to ignore likely unsafe or malformed matches (e.g., script tags, data URIs, obvious broken formats).
+- Simple validation and filtering to ignore likely unsafe or malformed matches (e.g: data URIs, obvious broken formats).
 - Masking of sensitive fields so outputs do not reveal full personal data (emails : `(first letter)***(@domain)`, cards:`**** **** **** (last four digits)`).
 
 ## Input design
@@ -25,7 +25,8 @@ This program reads a text file, finds common data (emails, links, phone numbers,
   - Phone: accepts common formats with spaces, dots, dashes, optional country code and parentheses.
   - Currency: matches dollar amounts with optional thousands separators and two decimals.
   - Card: accepts 16-digit numbers grouped by spaces or dashes.
-(See inline comments in `regex.js` for easy explanations on each code.)
+
+See inline comments in `regex.js` for easy explanations on each code.
 
 ## Security & robustness notes
 - Privacy: outputs are masked to avoid leaking full emails or card numbers.
